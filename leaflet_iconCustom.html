@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Leaflet: Customize Map-Icons</title>
+<link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+<style>
+	html, body, #map {
+		height: 100%;
+	}
+	body {
+		padding: 0;
+		margin: 0;
+	}
+</style>
+
+</head>
+<body>
+<div id="map" style="height: 100%;" ></div>
+<script type="text/javascript">
+var map = L.map('map', {
+	center: [52.48626, -1.89042], 
+	zoom: 8
+});
+
+L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+	attribution: 'OpenStreetMap Contributors'	
+}).addTo(map);
+
+var openStreetM = 
+	L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		attribution: 'OpenStreetMap Contributors'
+	}).addTo(map);
+		
+var watercolor = 
+	L.tileLayer('http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.png', {
+		attribution: 'OpenStreetMap Contributors'
+	}).addTo(map);	
+			
+var LeafIcon = L.Icon.extend({
+	options: {
+		iconSize:     [30, 30],
+		iconAnchor:   [15, 76],
+		popupAnchor:  [-2, -76]
+	}
+});
+// To add a customized Map-Icon, 
+// put the graphic (in this case a .png) in the folder directory, 
+// and link to it below using "iconURL"
+var IconM = new LeafIcon({iconUrl: 'images/pointerM.png'}),
+	Icon1 = new LeafIcon({iconUrl: 'images/pointer1.png'}),
+	Icon2 = new LeafIcon({iconUrl: 'images/pointer2.png'});
+
+var firstGroup = L.marker([51.37, -0.12], {icon: IconM, draggable: true,}).bindPopup("Click and Drag to Move Me.").addTo(map); 
+var secondGroup = L.marker([52.06, .12], {icon: Icon1}).bindPopup("I am Pointer at Cambridge.").addTo(map); 
+var thirdGroup = L.marker([52.33, -1.34], {icon: Icon2}).bindPopup("I am Pointer at Coventry.").addTo(map); 
+	
+L.control.layers({
+	'Water Color':watercolor,
+	'OSM': openStreetM
+}, {
+	'London': firstGroup,
+	'Cambridge': secondGroup, 
+	'Conventry': thirdGroup	
+}).addTo(map);
+L.control.scale().addTo(map); 	
+
+</script>
+
+</body>
+</html>
